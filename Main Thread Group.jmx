@@ -16,10 +16,10 @@
         <stringProp name="ThreadGroup.on_sample_error">stoptestnow</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <stringProp name="LoopController.loops">10</stringProp>
+          <stringProp name="LoopController.loops">${__P(loops_count,10)}</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">1500</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <stringProp name="ThreadGroup.num_threads">${__P(threads_count,1000)}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">120</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
@@ -44,35 +44,23 @@ vars.put(&quot;username&quot;, &quot;User &quot; + ctx.getThreadNum());</stringP
             </elementProp>
             <elementProp name="messageDelayBaseMs" elementType="Argument">
               <stringProp name="Argument.name">messageDelayBaseMs</stringProp>
-              <stringProp name="Argument.value">6000.0</stringProp>
+              <stringProp name="Argument.value">60000.0</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
             <elementProp name="messageDelayDiviationMs" elementType="Argument">
               <stringProp name="Argument.name">messageDelayDiviationMs</stringProp>
-              <stringProp name="Argument.value">60000</stringProp>
+              <stringProp name="Argument.value">15000</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
           </collectionProp>
         </Arguments>
-        <hashTree/>
-        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Users" enabled="true">
-          <stringProp name="delimiter">,</stringProp>
-          <stringProp name="fileEncoding"></stringProp>
-          <stringProp name="filename">jmeter_users.txt</stringProp>
-          <boolProp name="ignoreFirstLine">false</boolProp>
-          <boolProp name="quotedData">false</boolProp>
-          <boolProp name="recycle">true</boolProp>
-          <stringProp name="shareMode">shareMode.all</stringProp>
-          <boolProp name="stopThread">false</boolProp>
-          <stringProp name="variableNames">username1</stringProp>
-        </CSVDataSet>
         <hashTree/>
         <ConfigTestElement guiclass="TCPConfigGui" testclass="ConfigTestElement" testname="Chat Server TCP Configuration" enabled="true">
           <stringProp name="TCPSampler.server">${addr}</stringProp>
           <boolProp name="TCPSampler.reUseConnection">true</boolProp>
           <stringProp name="TCPSampler.port">8000</stringProp>
           <boolProp name="TCPSampler.nodelay">false</boolProp>
-          <stringProp name="TCPSampler.timeout">6000</stringProp>
+          <stringProp name="TCPSampler.timeout">10000</stringProp>
           <stringProp name="TCPSampler.request"></stringProp>
           <boolProp name="TCPSampler.closeConnection">false</boolProp>
           <stringProp name="TCPSampler.ctimeout">1000</stringProp>
@@ -103,7 +91,7 @@ vars.put(&quot;username&quot;, &quot;User &quot; + ctx.getThreadNum());</stringP
           <hashTree/>
           <BoundaryExtractor guiclass="BoundaryExtractorGui" testclass="BoundaryExtractor" testname="Extract last messages" enabled="true">
             <stringProp name="BoundaryExtractor.useHeaders">false</stringProp>
-            <stringProp name="BoundaryExtractor.refname">lastMessageReceived</stringProp>
+            <stringProp name="BoundaryExtractor.refname">boundaryValue</stringProp>
             <stringProp name="BoundaryExtractor.lboundary">{&quot;type&quot;:&quot;LastMessages&quot;,&quot;</stringProp>
             <stringProp name="BoundaryExtractor.rboundary">&quot;:&quot;</stringProp>
             <stringProp name="BoundaryExtractor.default">NO</stringProp>
@@ -115,18 +103,9 @@ vars.put(&quot;username&quot;, &quot;User &quot; + ctx.getThreadNum());</stringP
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
             <boolProp name="resetInterpreter">false</boolProp>
-            <stringProp name="script">
-boolean lastMessageReceivedBool = Boolean.parse(vars.get(&quot;lastMessageReceived&quot;));
-
-if (lastMessageReceivedBool) {
-	vars.put(&quot;needWaitFor&quot;, &quot;false&quot;);
-} else {
-	vars.put(&quot;needWaitFor&quot;, &quot;true&quot;);
-	vars.put(&quot;leftBoundaryExtractor&quot;, &quot;{\&quot;type\&quot;:\&quot;LastMessages\&quot;,\&quot;&quot;);
-	vars.put(&quot;rightBoundaryExtractor&quot;, &quot;\&quot;:\&quot;&quot;);
-	vars.put(&quot;boundaryWaitForValue&quot;, &quot;payload&quot;);	
-}
-</stringProp>
+            <stringProp name="script">vars.put(&quot;leftBoundaryExtractor&quot;, &quot;{\&quot;type\&quot;:\&quot;LastMessages\&quot;,\&quot;&quot;);
+vars.put(&quot;rightBoundaryExtractor&quot;, &quot;\&quot;:\&quot;&quot;);
+vars.put(&quot;boundaryWaitForValue&quot;, &quot;payload&quot;);	</stringProp>
           </BeanShellPostProcessor>
           <hashTree/>
         </hashTree>
@@ -138,46 +117,6 @@ if (lastMessageReceivedBool) {
           </collectionProp>
         </ModuleController>
         <hashTree/>
-        <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If need to receive last message" enabled="true">
-          <stringProp name="IfController.condition">${__javaScript(&quot;${lastMessageReceived}&quot; != &quot;payload&quot;,)}</stringProp>
-          <boolProp name="IfController.evaluateAll">false</boolProp>
-          <boolProp name="IfController.useExpression">true</boolProp>
-        </IfController>
-        <hashTree>
-          <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="${username} - Receive last message" enabled="true">
-            <stringProp name="TCPSampler.server"></stringProp>
-            <boolProp name="TCPSampler.reUseConnection">true</boolProp>
-            <stringProp name="TCPSampler.port"></stringProp>
-            <boolProp name="TCPSampler.nodelay">false</boolProp>
-            <stringProp name="TCPSampler.timeout"></stringProp>
-            <stringProp name="TCPSampler.request"></stringProp>
-            <boolProp name="TCPSampler.closeConnection">false</boolProp>
-            <stringProp name="ConfigTestElement.username"></stringProp>
-            <stringProp name="ConfigTestElement.password"></stringProp>
-          </TCPSampler>
-          <hashTree>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-              <collectionProp name="Asserion.test_strings">
-                <stringProp name="-2018224606">LastMessages</stringProp>
-              </collectionProp>
-              <stringProp name="Assertion.custom_message"></stringProp>
-              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-              <boolProp name="Assertion.assume_success">false</boolProp>
-              <intProp name="Assertion.test_type">16</intProp>
-            </ResponseAssertion>
-            <hashTree/>
-            <BoundaryExtractor guiclass="BoundaryExtractorGui" testclass="BoundaryExtractor" testname="Extract last messages 1" enabled="true">
-              <stringProp name="BoundaryExtractor.useHeaders">false</stringProp>
-              <stringProp name="BoundaryExtractor.refname">lastMessageReceived</stringProp>
-              <stringProp name="BoundaryExtractor.lboundary">{&quot;type&quot;:&quot;LastMessages&quot;,&quot;</stringProp>
-              <stringProp name="BoundaryExtractor.rboundary">&quot;:&quot;</stringProp>
-              <stringProp name="BoundaryExtractor.default">NO</stringProp>
-              <boolProp name="BoundaryExtractor.default_empty_value">false</boolProp>
-              <stringProp name="BoundaryExtractor.match_number">1</stringProp>
-            </BoundaryExtractor>
-            <hashTree/>
-          </hashTree>
-        </hashTree>
         <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="${username} - Send message jump" enabled="true">
           <stringProp name="TCPSampler.server"></stringProp>
           <boolProp name="TCPSampler.reUseConnection">true</boolProp>
@@ -246,9 +185,14 @@ if (lastMessageReceivedBool) {
           <stringProp name="ConfigTestElement.password"></stringProp>
         </TCPSampler>
         <hashTree>
+          <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Message Delay" enabled="true">
+            <stringProp name="ConstantTimer.delay">${messageDelayBaseMs}</stringProp>
+            <stringProp name="RandomTimer.range">${messageDelayDiviationMs}</stringProp>
+          </UniformRandomTimer>
+          <hashTree/>
           <BoundaryExtractor guiclass="BoundaryExtractorGui" testclass="BoundaryExtractor" testname="Extract logout login 1" enabled="true">
             <stringProp name="BoundaryExtractor.useHeaders">false</stringProp>
-            <stringProp name="BoundaryExtractor.refname">logoutCompletedAs</stringProp>
+            <stringProp name="BoundaryExtractor.refname">boundaryValue</stringProp>
             <stringProp name="BoundaryExtractor.lboundary">Logout by &apos;</stringProp>
             <stringProp name="BoundaryExtractor.rboundary">&apos; is successful</stringProp>
             <stringProp name="BoundaryExtractor.default">NO</stringProp>
@@ -256,40 +200,24 @@ if (lastMessageReceivedBool) {
             <stringProp name="BoundaryExtractor.match_number">1</stringProp>
           </BoundaryExtractor>
           <hashTree/>
-          <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Message Delay" enabled="true">
-            <stringProp name="ConstantTimer.delay">${messageDelayBaseMs}</stringProp>
-            <stringProp name="RandomTimer.range">${messageDelayDiviationMs}</stringProp>
-          </UniformRandomTimer>
+          <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="Configure waiting for logout success" enabled="true">
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="script">vars.put(&quot;leftBoundaryExtractor&quot;, &quot;Logout by &apos;&quot;);
+vars.put(&quot;rightBoundaryExtractor&quot;, &quot;&apos; is successful&quot;);
+vars.put(&quot;boundaryWaitForValue&quot;, &quot;${username}&quot;);	</stringProp>
+          </BeanShellPostProcessor>
           <hashTree/>
         </hashTree>
-        <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="Wait logout success response" enabled="true">
-          <stringProp name="WhileController.condition">${__javaScript(&quot;${logoutCompletedAs}&quot; != &quot;${username}&quot;,)}</stringProp>
-        </WhileController>
-        <hashTree>
-          <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="${username} - Receive message" enabled="true">
-            <stringProp name="TCPSampler.server"></stringProp>
-            <boolProp name="TCPSampler.reUseConnection">true</boolProp>
-            <stringProp name="TCPSampler.port"></stringProp>
-            <boolProp name="TCPSampler.nodelay">false</boolProp>
-            <stringProp name="TCPSampler.timeout"></stringProp>
-            <stringProp name="TCPSampler.request"></stringProp>
-            <boolProp name="TCPSampler.closeConnection">false</boolProp>
-            <stringProp name="ConfigTestElement.username"></stringProp>
-            <stringProp name="ConfigTestElement.password"></stringProp>
-          </TCPSampler>
-          <hashTree>
-            <BoundaryExtractor guiclass="BoundaryExtractorGui" testclass="BoundaryExtractor" testname="Extract logout login 2" enabled="true">
-              <stringProp name="BoundaryExtractor.useHeaders">false</stringProp>
-              <stringProp name="BoundaryExtractor.refname">logoutCompletedAs</stringProp>
-              <stringProp name="BoundaryExtractor.lboundary">Logout by &apos;</stringProp>
-              <stringProp name="BoundaryExtractor.rboundary">&apos; is successful</stringProp>
-              <stringProp name="BoundaryExtractor.default">NO</stringProp>
-              <boolProp name="BoundaryExtractor.default_empty_value">false</boolProp>
-              <stringProp name="BoundaryExtractor.match_number">1</stringProp>
-            </BoundaryExtractor>
-            <hashTree/>
-          </hashTree>
-        </hashTree>
+        <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="Wait logout success response" enabled="true">
+          <collectionProp name="ModuleController.node_path">
+            <stringProp name="764597751">Test Plan</stringProp>
+            <stringProp name="764597751">Test Plan</stringProp>
+            <stringProp name="313210644">Wait pattern in response (Test Fragment)</stringProp>
+          </collectionProp>
+        </ModuleController>
+        <hashTree/>
         <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="${username} - Close connection" enabled="true">
           <stringProp name="TCPSampler.server"></stringProp>
           <boolProp name="TCPSampler.reUseConnection">true</boolProp>
@@ -379,11 +307,13 @@ if (lastMessageReceivedBool) {
       </hashTree>
       <TestFragmentController guiclass="TestFragmentControllerGui" testclass="TestFragmentController" testname="Wait pattern in response (Test Fragment)" enabled="false"/>
       <hashTree>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Simple Controller" enabled="true"/>
+        <hashTree/>
         <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="While boundary value not expected" enabled="true">
-          <stringProp name="WhileController.condition">${__javaScript(&quot;${needWaitFor}&quot; === true &amp;&amp; &quot;${boundaryValue}&quot; != &quot;${boundaryWaitForValue}&quot;,)}</stringProp>
+          <stringProp name="WhileController.condition">${__javaScript(&quot;${boundaryValue}&quot; != &quot;${boundaryWaitForValue}&quot;,)}</stringProp>
         </WhileController>
         <hashTree>
-          <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="Read message" enabled="true">
+          <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="${username} - Wait for boundary &quot;${boundaryWaitForValue}&quot; between &quot;${leftBoundaryExtractor}&quot; - &quot;${rightBoundaryExtractor}&quot;" enabled="true">
             <stringProp name="TCPSampler.server"></stringProp>
             <boolProp name="TCPSampler.reUseConnection">true</boolProp>
             <stringProp name="TCPSampler.port"></stringProp>
