@@ -1,8 +1,8 @@
-package com.miro.leshukovma.chat.server.handler;
+package com.miro.leshukovma.chat.server.client_message_handler;
 
 import com.miro.leshukovma.chat.common.message.PayloadMessageHandler;
 import com.miro.leshukovma.chat.common.message.to_server.ExecuteCommand;
-import com.miro.leshukovma.chat.server.client.ClientContextStorage;
+import com.miro.leshukovma.chat.server.transport.ClientContextStorage;
 import com.miro.leshukovma.chat.server.command.CommandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

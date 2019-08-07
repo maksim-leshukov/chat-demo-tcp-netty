@@ -1,4 +1,4 @@
-package com.miro.leshukovma.chat.server.impl;
+package com.miro.leshukovma.chat.server.transport.tcp;
 
 import com.miro.leshukovma.chat.common.netty.DataMessageEncoder;
 import io.netty.bootstrap.ServerBootstrap;
@@ -14,8 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 @Component
-public class TcpChatServer implements ChatServer {
+public class TcpChatServer {
 
     @Value("${miro.chat.server.port:8000}")
     private int serverPort;
@@ -25,10 +28,11 @@ public class TcpChatServer implements ChatServer {
     @Autowired
     private DataMessageEncoder dataMessageEncoder;
 
-    EventLoopGroup bossGroup = new NioEventLoopGroup();
-    EventLoopGroup workerGroup = new NioEventLoopGroup();
+    private final EventLoopGroup bossGroup = new NioEventLoopGroup();
+    private final EventLoopGroup workerGroup = new NioEventLoopGroup();
 
 
+    @PostConstruct
     public void start() throws Exception {
         ServerBootstrap serverBootstrap = new ServerBootstrap();
         serverBootstrap.group(bossGroup, workerGroup)
@@ -49,9 +53,12 @@ public class TcpChatServer implements ChatServer {
         serverBootstrap.bind(serverPort).sync();
     }
 
+
+    @PreDestroy
     public void stop() {
         workerGroup.shutdownGracefully();
         bossGroup.shutdownGracefully();
     }
+
 
 }

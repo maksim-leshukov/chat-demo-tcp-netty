@@ -1,8 +1,11 @@
-package com.miro.leshukovma.chat.server.engine;
+package com.miro.leshukovma.chat.server.chat_engine;
 
 import com.miro.leshukovma.chat.common.message.to_client.*;
-import com.miro.leshukovma.chat.server.client.ClientContext;
-import com.miro.leshukovma.chat.server.client.ServerDataMessageWriter;
+import com.miro.leshukovma.chat.server.chat_engine.clients.ClientsStorage;
+import com.miro.leshukovma.chat.server.chat_engine.messages.ChatMessage;
+import com.miro.leshukovma.chat.server.chat_engine.messages.MessagesStorage;
+import com.miro.leshukovma.chat.server.transport.ClientContext;
+import com.miro.leshukovma.chat.server.transport.ClientWriter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,18 +15,18 @@ import java.util.List;
 
 @Slf4j
 @Component
-public class ChatEngine {
+public class InMemoryChatEngine implements ChatEngine {
 
     @Autowired
-    private MessagesHolder messagesHolder;
+    private MessagesStorage messagesStorage;
     @Autowired
-    private ClientsHolder clientsHolder;
+    private ClientsStorage clientsStorage;
     @Autowired
-    private ServerDataMessageWriter messageWriter;
+    private ClientWriter messageWriter;
 
-
-    public void onUserLogin(String login, ClientContext client) {
-        boolean successful = clientsHolder.addAs(login, client, this::onSuccessLogin);
+    @Override
+    public void loginAs(String login, ClientContext client) {
+        boolean successful = clientsStorage.tryAddAs(login, client, this::onSuccessLogin);
         if (!successful) {
             messageWriter.write(client, new CommandExecutionResult("Login '" + login + "' not valid"));
         }
@@ -34,7 +37,7 @@ public class ChatEngine {
         log.debug("Logged as: '{}'", login);
         messageWriter.write(client, new LoginAccepted());
 
-        List<ChatMessageDto> lastMessages = messagesHolder.getMessages(chatMessage -> {
+        List<ChatMessageDto> lastMessages = messagesStorage.getMessages(chatMessage -> {
             ChatMessageDto chatMessageDto = new ChatMessageDto();
             mapMessage(chatMessage, chatMessageDto);
             return chatMessageDto;
@@ -42,28 +45,33 @@ public class ChatEngine {
         messageWriter.write(client, new LastMessages(lastMessages));
     }
 
-    public void onUserLogout(ClientContext client) {
+
+    @Override
+    public void logout(ClientContext client) {
         String login = client.getLogin();
         log.debug("Logout as: {}", login);
 
-        clientsHolder.remove(login);
+        clientsStorage.remove(login);
         client.setLogin(null);
         messageWriter.write(new CommandExecutionResult("Logout by '" + login + "' is successful"));
     }
 
-    public void onUserMessage(String senderUsername, String message) {
+
+    @Override
+    public void createMessage(String senderUsername, String message) {
         log.debug("Send message as: {}", senderUsername);
-        ChatMessage chatMessage = messagesHolder.addMessage(senderUsername, message);
+        ChatMessage chatMessage = messagesStorage.addMessage(senderUsername, message);
 
         NewMessage payloadMessage = new NewMessage();
         mapMessage(chatMessage, payloadMessage);
 
-        Collection<ClientContext> clients = clientsHolder.getClients();
+        Collection<ClientContext> clients = clientsStorage.getClients();
         for (ClientContext clientToSendMessage : clients) {
             messageWriter.write(clientToSendMessage, payloadMessage);
         }
 
     }
+
 
     private void mapMessage(ChatMessage chatMessage, ChatMessageDto payloadMessage) {
         payloadMessage.setDate(chatMessage.getDate());

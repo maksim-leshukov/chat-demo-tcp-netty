@@ -2,6 +2,7 @@ package com.miro.leshukovma.chat.client.transport.tcp;
 
 import com.miro.leshukovma.chat.client.connection_state_machine.ClientStateMachine;
 import com.miro.leshukovma.chat.client.connection_state_machine.StateEvent;
+import com.miro.leshukovma.chat.common.ByteBufUtil;
 import com.miro.leshukovma.chat.common.data_message.DataMessage;
 import com.miro.leshukovma.chat.common.data_message.DataMessageSerializerDeserializer;
 import com.miro.leshukovma.chat.common.data_message.PayloadMessageDispatcher;
@@ -14,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 
 @Slf4j
 @Component
@@ -41,7 +41,7 @@ public class TcpChatClientConnectionHandler extends ChannelInboundHandlerAdapter
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws IOException {
         try {
             ByteBuf in = (ByteBuf) msg;
-            String json = getJsonString(in);
+            String json = ByteBufUtil.getJsonString(in);
 
             DataMessage dataMessage = serializerDeserializer.deserialize(json);
 
@@ -57,12 +57,6 @@ public class TcpChatClientConnectionHandler extends ChannelInboundHandlerAdapter
         ctx.close();
     }
 
-
-    private String getJsonString(ByteBuf in) {
-        int bytesCount = in.readableBytes();
-        CharSequence charSequence = in.getCharSequence(0, bytesCount, Charset.forName("UTF-8"));
-        return charSequence.toString();
-    }
 
 
     @Override

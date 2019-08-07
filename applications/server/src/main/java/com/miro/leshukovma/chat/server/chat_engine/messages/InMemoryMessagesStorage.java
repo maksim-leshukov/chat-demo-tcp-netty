@@ -1,4 +1,4 @@
-package com.miro.leshukovma.chat.server.engine;
+package com.miro.leshukovma.chat.server.chat_engine.messages;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.queue.CircularFifoQueue;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class MessagesHolder {
+public class InMemoryMessagesStorage implements MessagesStorage {
 
     @Value("${miro.chat.server.message.storage_limit:100}")
     private int messagesStorageLimit;
@@ -30,6 +30,7 @@ public class MessagesHolder {
         messages = new CircularFifoQueue<>(messagesStorageLimit);
     }
 
+    @Override
     public synchronized ChatMessage addMessage(String senderUsername, String message) {
 
         ChatMessage messagePojo = new ChatMessage();
@@ -47,6 +48,8 @@ public class MessagesHolder {
         return messagePojo;
     }
 
+
+    @Override
     public synchronized
     <ResultMessageType> List<ResultMessageType> getMessages(Function<ChatMessage, ResultMessageType> mapper) {
 
@@ -54,4 +57,5 @@ public class MessagesHolder {
                 .map(mapper)
                 .collect(Collectors.toList());
     }
+
 }

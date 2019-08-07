@@ -1,10 +1,10 @@
 package com.miro.leshukovma.chat.server.command.executors;
 
 import com.miro.leshukovma.chat.common.message.to_client.CommandExecutionResult;
-import com.miro.leshukovma.chat.server.client.ClientWriter;
+import com.miro.leshukovma.chat.server.transport.ClientContext;
+import com.miro.leshukovma.chat.server.transport.ClientWriter;
 import com.miro.leshukovma.chat.server.command.CommandExecutor;
 import com.miro.leshukovma.chat.server.command.CommandService;
-import com.miro.leshukovma.chat.server.client.ClientContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +35,6 @@ public class HelpCommandExecutor implements CommandExecutor {
                 .map(executor -> "/" + executor.getCommandName() + " - " + executor.getCommandDescription())
                 .collect(Collectors.joining("\n"));
 
-        clientWriter.printMessage(clientContext, new CommandExecutionResult("Available commands:\n" + commands));
+        clientWriter.write(clientContext, new CommandExecutionResult("Available commands:\n" + commands));
     }
 }

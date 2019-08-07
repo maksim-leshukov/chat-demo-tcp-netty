@@ -1,4 +1,4 @@
-package com.miro.leshukovma.chat.server.client;
+package com.miro.leshukovma.chat.server.transport;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -6,7 +6,8 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class ClientContextStorage {
-    public ThreadLocal<ClientContext> threadLocalContext = new ThreadLocal<>();
+
+    private final ThreadLocal<ClientContext> threadLocalContext = new ThreadLocal<>();
 
     public ClientContext get() {
         ClientContext clientContext = threadLocalContext.get();
@@ -20,7 +21,4 @@ public class ClientContextStorage {
         threadLocalContext.set(ctx);
     }
 
-    public boolean isAssigned() {
-        return threadLocalContext.get() != null;
-    }
 }

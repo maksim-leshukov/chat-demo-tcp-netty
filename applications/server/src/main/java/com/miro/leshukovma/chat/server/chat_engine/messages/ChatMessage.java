@@ -1,4 +1,4 @@
-package com.miro.leshukovma.chat.server.engine;
+package com.miro.leshukovma.chat.server.chat_engine.messages;
 
 import lombok.Data;
 

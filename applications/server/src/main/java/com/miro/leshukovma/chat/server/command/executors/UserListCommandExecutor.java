@@ -1,10 +1,10 @@
 package com.miro.leshukovma.chat.server.command.executors;
 
 import com.miro.leshukovma.chat.common.message.to_client.CommandExecutionResult;
-import com.miro.leshukovma.chat.server.client.ClientContext;
-import com.miro.leshukovma.chat.server.client.ServerDataMessageWriter;
+import com.miro.leshukovma.chat.server.chat_engine.clients.ClientsStorage;
+import com.miro.leshukovma.chat.server.transport.ClientContext;
+import com.miro.leshukovma.chat.server.transport.ClientWriter;
 import com.miro.leshukovma.chat.server.command.CommandExecutor;
-import com.miro.leshukovma.chat.server.engine.ClientsHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,9 +16,9 @@ import java.util.stream.Collectors;
 public class UserListCommandExecutor implements CommandExecutor {
 
     @Autowired
-    private ClientsHolder clientsHolder;
+    private ClientsStorage clientsStorage;
     @Autowired
-    private ServerDataMessageWriter messageWriter;
+    private ClientWriter messageWriter;
 
     @Override
     public String getCommandName() {
@@ -32,7 +32,7 @@ public class UserListCommandExecutor implements CommandExecutor {
 
     @Override
     public void execute(ClientContext clientContext, List<String> parameters) {
-        Collection<String> usernames = clientsHolder.getUserLogins();
+        Collection<String> usernames = clientsStorage.getClientLogins();
         String usernamesBlock = usernames.stream()
                 .map(username -> "- " + username)
                 .collect(Collectors.joining("\n"));

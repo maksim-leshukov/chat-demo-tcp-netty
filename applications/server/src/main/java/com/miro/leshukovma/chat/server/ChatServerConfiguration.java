@@ -1,4 +1,4 @@
-package com.miro.leshukovma.chat.server.impl;
+package com.miro.leshukovma.chat.server;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

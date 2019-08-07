@@ -1,6 +1,6 @@
-package com.miro.leshukovma.chat.server.engine;
+package com.miro.leshukovma.chat.server.chat_engine.clients;
 
-import com.miro.leshukovma.chat.server.client.ClientContext;
+import com.miro.leshukovma.chat.server.transport.ClientContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -12,13 +12,14 @@ import java.util.function.BiConsumer;
 
 @Slf4j
 @Service
-public class ClientsHolder {
+public class InMemoryClientsStorage implements ClientsStorage {
 
     private ConcurrentHashMap<String, ClientContext> clientLogin2context = new ConcurrentHashMap<>();
 
     private final AtomicLong successLoginClientCount = new AtomicLong();
 
-    public boolean addAs(String login, ClientContext client, BiConsumer<String, ClientContext> onSuccessLogin) {
+    @Override
+    public boolean tryAddAs(String login, ClientContext client, BiConsumer<String, ClientContext> onSuccessLogin) {
         AtomicBoolean insertedNew = new AtomicBoolean(false);
         clientLogin2context.computeIfAbsent(login, currentLogin ->  {
             successLoginClientCount.incrementAndGet();
@@ -35,15 +36,23 @@ public class ClientsHolder {
         return insertedNew.get();
     }
 
+
+    @Override
     public void remove(String login) {
         clientLogin2context.remove(login);
     }
 
-    public Collection<String> getUserLogins() {
+
+    @Override
+    public Collection<String> getClientLogins() {
         return clientLogin2context.keySet();
     }
 
+
+    @Override
     public Collection<ClientContext> getClients() {
         return clientLogin2context.values();
     }
+
+
 }

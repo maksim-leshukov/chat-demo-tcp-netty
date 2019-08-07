@@ -1,6 +1,6 @@
 package com.miro.leshukovma.chat.server.command;
 
-import com.miro.leshukovma.chat.server.client.ClientContext;
+import com.miro.leshukovma.chat.server.transport.ClientContext;
 
 import java.util.List;
 
