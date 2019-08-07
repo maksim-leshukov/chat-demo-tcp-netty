@@ -12,12 +12,12 @@ import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Component
-public class GuiReaderThread implements Runnable {
+public class UserConsoleInputReaderRunnable implements Runnable {
 
     private StringBuffer buffer = new StringBuffer();
 
     @Autowired
-    private UserInputDispatcher userInputDispatcher;
+    private UserInputHandlerKeeper userInputHandlerKeeper;
 
     public void run() {
         try {
@@ -29,7 +29,7 @@ public class GuiReaderThread implements Runnable {
                     buffer.appendCodePoint(userInputChar);
                 } else {
                     String userInput = buffer.toString();
-                    userInputDispatcher.dispatch(userInput);
+                    userInputHandlerKeeper.dispatch(userInput);
                     buffer = new StringBuffer();
                 }
             }

@@ -13,7 +13,7 @@ import java.util.concurrent.Future;
 public class ClientGui {
 
     @Autowired
-    private GuiReaderThread guiReaderThread;
+    private UserConsoleInputReaderRunnable userConsoleInputReaderRunnable;
 
 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -21,7 +21,7 @@ public class ClientGui {
 
     @PostConstruct
     public void startReadUserInput() {
-        readerFuture = executor.submit(guiReaderThread);
+        readerFuture = executor.submit(userConsoleInputReaderRunnable);
     }
 
     @PreDestroy

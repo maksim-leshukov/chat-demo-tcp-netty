@@ -1,10 +1,12 @@
 package com.miro.leshukovma.chat.client.gui;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class UserDialogService {
+
     public void print(String message) {
         System.out.println(message);
     }
+
 }

@@ -1,4 +1,4 @@
-package com.miro.leshukovma.chat.client.gui.state_machine;
+package com.miro.leshukovma.chat.client.connection_state_machine;
 
 public enum  StateEvent {
     ConnectionEstabilishd,

@@ -1,8 +1,8 @@
-package com.miro.leshukovma.chat.client.handler;
+package com.miro.leshukovma.chat.client.server_message_handler;
 
 import com.miro.leshukovma.chat.client.gui.UserDialogService;
-import com.miro.leshukovma.chat.client.gui.UserInputDispatcher;
-import com.miro.leshukovma.chat.client.gui.input_handlers.LoggedUserInputHandler;
+import com.miro.leshukovma.chat.client.gui.UserInputHandlerKeeper;
+import com.miro.leshukovma.chat.client.user_input_handlers.LoggedUserInputHandler;
 import com.miro.leshukovma.chat.common.message.PayloadMessageHandler;
 import com.miro.leshukovma.chat.common.message.to_client.LoginAccepted;
 import lombok.extern.slf4j.Slf4j;
@@ -15,14 +15,14 @@ public class LoginAcceptedHandler implements PayloadMessageHandler<LoginAccepted
 
 
     @Autowired
-    private UserInputDispatcher userInputDispatcher;
+    private UserInputHandlerKeeper userInputHandlerKeeper;
     @Autowired
     private LoggedUserInputHandler loggedUserInputHandler;
     @Autowired
     private UserDialogService userDialogService;
 
     public void onMessage(LoginAccepted message) {
-        userInputDispatcher.setUserInputHandler(loggedUserInputHandler);
+        userInputHandlerKeeper.setUserInputHandler(loggedUserInputHandler);
         userDialogService.print("Login successful");
     }
 }

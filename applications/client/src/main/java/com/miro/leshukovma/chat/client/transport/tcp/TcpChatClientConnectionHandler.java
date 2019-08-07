@@ -1,7 +1,7 @@
-package com.miro.leshukovma.chat.client;
+package com.miro.leshukovma.chat.client.transport.tcp;
 
-import com.miro.leshukovma.chat.client.gui.state_machine.ClientStateMachine;
-import com.miro.leshukovma.chat.client.gui.state_machine.StateEvent;
+import com.miro.leshukovma.chat.client.connection_state_machine.ClientStateMachine;
+import com.miro.leshukovma.chat.client.connection_state_machine.StateEvent;
 import com.miro.leshukovma.chat.common.data_message.DataMessage;
 import com.miro.leshukovma.chat.common.data_message.DataMessageSerializerDeserializer;
 import com.miro.leshukovma.chat.common.data_message.PayloadMessageDispatcher;
@@ -25,7 +25,7 @@ public class TcpChatClientConnectionHandler extends ChannelInboundHandlerAdapter
     @Autowired
     private PayloadMessageDispatcher messageDispatcher;
     @Autowired
-    private ClientDataMessageWriter messageWriter;
+    private TcpServerDataMessageWriter messageWriter;
     @Autowired
     private ClientStateMachine clientStateMachine;
 
@@ -57,9 +57,18 @@ public class TcpChatClientConnectionHandler extends ChannelInboundHandlerAdapter
         ctx.close();
     }
 
+
     private String getJsonString(ByteBuf in) {
         int bytesCount = in.readableBytes();
         CharSequence charSequence = in.getCharSequence(0, bytesCount, Charset.forName("UTF-8"));
         return charSequence.toString();
     }
+
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        log.info("Channel inactive");
+        super.channelInactive(ctx);
+    }
+
 }

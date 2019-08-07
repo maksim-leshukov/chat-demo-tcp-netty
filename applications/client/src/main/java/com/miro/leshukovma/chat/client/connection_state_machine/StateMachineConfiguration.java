@@ -1,6 +1,6 @@
-package com.miro.leshukovma.chat.client.gui.state_machine;
+package com.miro.leshukovma.chat.client.connection_state_machine;
 
-import com.miro.leshukovma.chat.client.gui.state_machine.handlers.ConnectionEstablishedHandler;
+import com.miro.leshukovma.chat.client.connection_state_machine.handlers.ConnectionEstablishedHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

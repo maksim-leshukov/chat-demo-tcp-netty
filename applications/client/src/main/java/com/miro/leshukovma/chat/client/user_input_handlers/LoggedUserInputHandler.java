@@ -1,7 +1,7 @@
-package com.miro.leshukovma.chat.client.gui.input_handlers;
+package com.miro.leshukovma.chat.client.user_input_handlers;
 
-import com.miro.leshukovma.chat.client.ClientDataMessageWriter;
 import com.miro.leshukovma.chat.client.gui.UserDialogService;
+import com.miro.leshukovma.chat.client.transport.ServerDataMessageWriter;
 import com.miro.leshukovma.chat.common.message.to_server.ExecuteCommand;
 import com.miro.leshukovma.chat.common.message.to_server.SendMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ public class LoggedUserInputHandler implements UserInputHandler {
 
 
     @Autowired
-    private ClientDataMessageWriter messageWriter;
+    private ServerDataMessageWriter messageWriter;
     @Autowired
     private UserDialogService userDialogService;
 

@@ -1,4 +1,4 @@
-package com.miro.leshukovma.chat.client.gui.state_machine;
+package com.miro.leshukovma.chat.client.connection_state_machine;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.statemachine.StateMachine;

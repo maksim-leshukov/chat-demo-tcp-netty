@@ -1,4 +1,4 @@
-package com.miro.leshukovma.chat.client.handler;
+package com.miro.leshukovma.chat.client.server_message_handler;
 
 import com.miro.leshukovma.chat.common.message.to_client.NewMessage;
 import org.springframework.stereotype.Component;

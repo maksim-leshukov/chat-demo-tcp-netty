@@ -1,4 +1,4 @@
-package com.miro.leshukovma.chat.client;
+package com.miro.leshukovma.chat.client.transport.tcp;
 
 import com.miro.leshukovma.chat.common.netty.DataMessageEncoder;
 import io.netty.bootstrap.Bootstrap;
@@ -11,6 +11,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.json.JsonObjectDecoder;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+@Slf4j
 @Component
 public class TcpChatClient {
 
@@ -37,16 +39,16 @@ public class TcpChatClient {
     @PostConstruct
     public void start() {
 
-        Bootstrap bootstrap = new Bootstrap();
-        bootstrap.group(workerGroup);
-        bootstrap.channel(NioSocketChannel.class);
-        bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
-        bootstrap.handler(new ChannelInitializer<SocketChannel>() {
-            @Override
-            public void initChannel(SocketChannel ch) {
-                ch.pipeline().addLast(new JsonObjectDecoder(), dataMessageEncoder, clientHandler);
-            }
-        });
+        Bootstrap bootstrap = new Bootstrap()
+            .group(workerGroup)
+            .channel(NioSocketChannel.class)
+            .option(ChannelOption.SO_KEEPALIVE, true)
+            .handler(new ChannelInitializer<SocketChannel>() {
+                @Override
+                public void initChannel(SocketChannel ch) {
+                    ch.pipeline().addLast(new JsonObjectDecoder(), dataMessageEncoder, clientHandler);
+                }
+            });
 
 
         ChannelFuture channelFuture = bootstrap.connect(host, port).sync();

@@ -1,4 +1,4 @@
-package com.miro.leshukovma.chat.client.gui.input_handlers;
+package com.miro.leshukovma.chat.client.user_input_handlers;
 
 public interface UserInputHandler {
 

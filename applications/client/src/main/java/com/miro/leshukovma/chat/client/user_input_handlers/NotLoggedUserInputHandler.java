@@ -1,7 +1,7 @@
-package com.miro.leshukovma.chat.client.gui.input_handlers;
+package com.miro.leshukovma.chat.client.user_input_handlers;
 
-import com.miro.leshukovma.chat.client.ClientDataMessageWriter;
 import com.miro.leshukovma.chat.client.gui.UserDialogService;
+import com.miro.leshukovma.chat.client.transport.ServerDataMessageWriter;
 import com.miro.leshukovma.chat.common.message.to_server.LoginAs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class NotLoggedUserInputHandler implements UserInputHandler {
 
     @Autowired
-    private ClientDataMessageWriter messageWriter;
+    private ServerDataMessageWriter messageWriter;
     @Autowired
     private UserDialogService userDialogService;
 
