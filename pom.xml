@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.miro.leshukovma.chat</groupId>
+    <groupId>org.test.chat</groupId>
     <artifactId>chat-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -13,5 +13,11 @@
         <module>common</module>
         <module>applications</module>
     </modules>
+
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring.boot.version>1.5.21.RELEASE</spring.boot.version>
+    </properties>
 
 </project>
