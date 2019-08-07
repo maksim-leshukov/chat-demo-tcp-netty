@@ -4,8 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.Console;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 
 @Slf4j
@@ -19,7 +21,8 @@ public class GuiReaderThread implements Runnable {
 
     public void run() {
         try {
-            InputStreamReader userInputStream = new InputStreamReader(System.in, StandardCharsets.UTF_8);
+            Console console = System.console();
+            Reader userInputStream =  console != null ? console.reader() : new InputStreamReader(System.in, StandardCharsets.UTF_8);
             while (!Thread.interrupted()) {
                 int userInputChar = userInputStream.read();
                 if (userInputChar != '\n') {
