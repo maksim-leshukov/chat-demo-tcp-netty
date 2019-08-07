@@ -11,19 +11,19 @@ import java.io.IOException;
 @Service
 public class DataMessageSerializerDeserializer {
 
-    private ObjectMapper mapper = new ObjectMapper();
-    private ObjectWriter writer = mapper.writerFor(DataMessage.class);
-    private ObjectReader reader = mapper.readerFor(DataMessage.class);
+    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectWriter serializer = mapper.writerFor(DataMessage.class);
+    private final ObjectReader deserializer = mapper.readerFor(DataMessage.class);
 
 
     @SneakyThrows
     public String serialize(DataMessage msg) {
-        return writer.writeValueAsString(msg);
+        return serializer.writeValueAsString(msg);
     }
 
 
     public DataMessage deserialize(String json) throws IOException {
-        return reader.readValue(json);
+        return deserializer.readValue(json);
     }
 
 }
