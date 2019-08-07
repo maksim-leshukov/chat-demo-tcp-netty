@@ -1,4 +1,4 @@
-package com.miro.leshukovma.chat.common.netty;
+package com.miro.leshukovma.chat.common.transport.tcp;
 
 import com.miro.leshukovma.chat.common.data_message.DataMessage;
 import com.miro.leshukovma.chat.common.data_message.DataMessageSerializerDeserializer;

@@ -1,6 +1,6 @@
 package com.miro.leshukovma.chat.server.transport.tcp;
 
-import com.miro.leshukovma.chat.common.data_message.DataMessageWriter;
+import com.miro.leshukovma.chat.common.transport.tcp.TcpDataMessageWriter;
 import com.miro.leshukovma.chat.common.message.PayloadMessage;
 import com.miro.leshukovma.chat.server.transport.ClientContext;
 import com.miro.leshukovma.chat.server.transport.ClientContextStorage;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class TcpClientWriter implements ClientWriter {
 
     @Autowired
-    private DataMessageWriter dataMessageWriter;
+    private TcpDataMessageWriter dataMessageWriter;
     @Autowired
     private ClientContextStorage clientContextStorage;
 

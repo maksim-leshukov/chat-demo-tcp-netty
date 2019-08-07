@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.BiConsumer;
@@ -14,7 +15,7 @@ import java.util.function.BiConsumer;
 @Service
 public class InMemoryClientsStorage implements ClientsStorage {
 
-    private ConcurrentHashMap<String, ClientContext> clientLogin2context = new ConcurrentHashMap<>();
+    private ConcurrentMap<String, ClientContext> clientLogin2context = new ConcurrentHashMap<>();
 
     private final AtomicLong successLoginClientCount = new AtomicLong();
 

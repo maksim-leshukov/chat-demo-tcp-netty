@@ -1,6 +1,8 @@
-package com.miro.leshukovma.chat.common.data_message;
+package com.miro.leshukovma.chat.common.data_message.impl;
 
 import com.miro.leshukovma.chat.common.DataMessageType;
+import com.miro.leshukovma.chat.common.data_message.MessageSerializerDeserializer;
+import com.miro.leshukovma.chat.common.data_message.PayloadMessageHandlersProvider;
 import com.miro.leshukovma.chat.common.message.PayloadMessage;
 import com.miro.leshukovma.chat.common.message.PayloadMessageHandler;
 import com.miro.leshukovma.chat.common.message.PayloadMessageType;
@@ -15,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class PayloadMessageHandlersKeeper {
+public class ByAnnotationPayloadMessageHandlerProvider implements PayloadMessageHandlersProvider {
 
     @Autowired
     private MessageSerializerDeserializer messageDeserializer;
@@ -54,6 +56,7 @@ public class PayloadMessageHandlersKeeper {
     }
 
 
+    @Override
     public PayloadMessageHandler getHandler(DataMessageType type) {
         PayloadMessageHandler handler = messageType2handler.get(type);
         if (handler == null) {

@@ -1,7 +1,7 @@
 package com.miro.leshukovma.chat.client.transport.tcp;
 
 import com.miro.leshukovma.chat.client.transport.ServerDataMessageWriter;
-import com.miro.leshukovma.chat.common.data_message.DataMessageWriter;
+import com.miro.leshukovma.chat.common.transport.tcp.TcpDataMessageWriter;
 import com.miro.leshukovma.chat.common.message.PayloadMessage;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Setter;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class TcpServerDataMessageWriter implements ServerDataMessageWriter {
 
     @Autowired
-    private DataMessageWriter dataMessageWriter;
+    private TcpDataMessageWriter dataMessageWriter;
 
     @Setter
     private ChannelHandlerContext ctx;

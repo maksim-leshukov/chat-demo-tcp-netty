@@ -1,6 +1,6 @@
 package com.miro.leshukovma.chat.server.transport.tcp;
 
-import com.miro.leshukovma.chat.common.netty.DataMessageEncoder;
+import com.miro.leshukovma.chat.common.transport.tcp.DataMessageEncoder;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;

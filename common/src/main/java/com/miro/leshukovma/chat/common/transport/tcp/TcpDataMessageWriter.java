@@ -1,23 +1,25 @@
-package com.miro.leshukovma.chat.common.data_message;
+package com.miro.leshukovma.chat.common.transport.tcp;
 
 import com.miro.leshukovma.chat.common.DataMessageType;
+import com.miro.leshukovma.chat.common.data_message.DataMessage;
+import com.miro.leshukovma.chat.common.data_message.MessageSerializerDeserializer;
 import com.miro.leshukovma.chat.common.message.PayloadMessage;
 import com.miro.leshukovma.chat.common.message.PayloadMessageType;
 import io.netty.channel.ChannelHandlerContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 @Service
-public class DataMessageWriter {
+public class TcpDataMessageWriter {
 
 
     @Autowired
     private MessageSerializerDeserializer serializerDeserializer;
 
-    private Map<Class, DataMessageType> class2type = new HashMap<>();
+    private ConcurrentMap<Class, DataMessageType> class2type = new ConcurrentHashMap<>();
 
     public void write(ChannelHandlerContext ctx, PayloadMessage payloadMessage) {
         DataMessage dataMessage = new DataMessage();
@@ -32,12 +34,9 @@ public class DataMessageWriter {
     }
 
     private DataMessageType getType(Class payloadMessageClass) {
-        DataMessageType type = class2type.get(payloadMessageClass);
-        if (type == null) {
-            PayloadMessageType messageTypeAnnotation = (PayloadMessageType) payloadMessageClass.getDeclaredAnnotation(PayloadMessageType.class);
-            type = messageTypeAnnotation.value();
-            class2type.put(payloadMessageClass, type);
-        }
-        return type;
+        return class2type.computeIfAbsent(payloadMessageClass, payloadClass -> {
+            PayloadMessageType messageTypeAnnotation = (PayloadMessageType) payloadClass.getDeclaredAnnotation(PayloadMessageType.class);
+            return messageTypeAnnotation.value();
+        });
     }
 }

@@ -1,6 +1,6 @@
 package com.miro.leshukovma.chat.client.transport.tcp;
 
-import com.miro.leshukovma.chat.client.connection_state_machine.ClientStateMachine;
+import com.miro.leshukovma.chat.client.connection_state_machine.ConnectionStateMachine;
 import com.miro.leshukovma.chat.client.connection_state_machine.StateEvent;
 import com.miro.leshukovma.chat.common.ByteBufUtil;
 import com.miro.leshukovma.chat.common.data_message.DataMessage;
@@ -27,7 +27,7 @@ public class TcpChatClientConnectionHandler extends ChannelInboundHandlerAdapter
     @Autowired
     private TcpServerDataMessageWriter messageWriter;
     @Autowired
-    private ClientStateMachine clientStateMachine;
+    private ConnectionStateMachine clientStateMachine;
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {

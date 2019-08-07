@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 
 @Service
-public class ClientStateMachine {
+public class SpringConnectionStateMachine implements ConnectionStateMachine {
 
     @Autowired
     private StateMachine<ClientState, StateEvent> stateMachine;
@@ -17,6 +17,8 @@ public class ClientStateMachine {
         stateMachine.start();
     }
 
+
+    @Override
     public void toState(StateEvent stateEvent) {
         stateMachine.sendEvent(stateEvent);
     }

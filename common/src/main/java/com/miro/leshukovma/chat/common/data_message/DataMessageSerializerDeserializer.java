@@ -11,9 +11,16 @@ import java.io.IOException;
 @Service
 public class DataMessageSerializerDeserializer {
 
-    private final ObjectMapper mapper = new ObjectMapper();
-    private final ObjectWriter serializer = mapper.writerFor(DataMessage.class);
-    private final ObjectReader deserializer = mapper.readerFor(DataMessage.class);
+    private final ObjectWriter serializer;
+    private final ObjectReader deserializer;
+
+
+    public DataMessageSerializerDeserializer() {
+        ObjectMapper mapper = new ObjectMapper();
+
+        serializer = mapper.writerFor(DataMessage.class);
+        deserializer = mapper.readerFor(DataMessage.class);
+    }
 
 
     @SneakyThrows

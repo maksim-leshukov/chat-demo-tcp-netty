@@ -16,7 +16,7 @@ public class PayloadMessageDispatcher {
     @Autowired
     private MessageSerializerDeserializer messageDeserializer;
     @Autowired
-    private PayloadMessageHandlersKeeper handlersKeeper;
+    private PayloadMessageHandlersProvider handlersKeeper;
 
 
     public void dispatch(DataMessage dataMessage) {
