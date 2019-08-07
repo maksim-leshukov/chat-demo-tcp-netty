@@ -36,7 +36,7 @@ public class LoggedUserInputHandler implements UserInputHandler {
                     if (spaceIndex == -1) {
                         spaceIndex = userInput.length();
                     }
-                    String commandName = userInput.substring(1, spaceIndex);
+                    String commandName = userInput.substring(1, spaceIndex).trim();
                     String commandParameters = userInput.substring(spaceIndex);
                     List<String> parameters = StringUtils.isEmpty(commandParameters)
                             ? Collections.EMPTY_LIST
