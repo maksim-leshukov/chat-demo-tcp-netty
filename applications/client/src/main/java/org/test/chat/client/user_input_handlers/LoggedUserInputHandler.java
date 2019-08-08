@@ -19,9 +19,9 @@ public class LoggedUserInputHandler implements UserInputHandler {
 
 
     @Autowired
-    private ServerDataMessageWriter messageWriter;
+    protected ServerDataMessageWriter messageWriter;
     @Autowired
-    private UserDialogService userDialogService;
+    protected UserDialogService userDialogService;
 
     public void onMessage(String userInput) {
         log.info("User input: '{}'", userInput);
@@ -37,10 +37,10 @@ public class LoggedUserInputHandler implements UserInputHandler {
                         spaceIndex = userInput.length();
                     }
                     String commandName = userInput.substring(1, spaceIndex).trim();
-                    String commandParameters = userInput.substring(spaceIndex);
+                    String commandParameters = userInput.substring(spaceIndex).trim();
                     List<String> parameters = StringUtils.isEmpty(commandParameters)
                             ? Collections.EMPTY_LIST
-                            : Arrays.asList(commandParameters.split("\'s+"));
+                            : Arrays.asList(commandParameters.split("\\s+"));
                     messageWriter.write(new ExecuteCommand(commandName, parameters));
                 }
             } else {

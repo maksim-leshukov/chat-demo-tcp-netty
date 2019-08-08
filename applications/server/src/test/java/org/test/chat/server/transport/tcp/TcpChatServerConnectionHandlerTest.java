@@ -14,7 +14,7 @@ public class TcpChatServerConnectionHandlerTest {
 
     @Test
     public void exceptionCaughtWhenNotLogged() {
-        handler.exceptionCaught(mock(ChannelHandlerContext.class), new RuntimeException());
+        handler.exceptionCaught(mock(ChannelHandlerContext.class), null);
     }
 
     @Test
@@ -23,7 +23,7 @@ public class TcpChatServerConnectionHandlerTest {
         handler.currentConnectionClientContext.setLogin("login1");
 
 
-        handler.exceptionCaught(mock(ChannelHandlerContext.class), new RuntimeException());
+        handler.exceptionCaught(mock(ChannelHandlerContext.class), null);
 
 
         verify(handler.chatEngine).logout(eq(handler.currentConnectionClientContext));

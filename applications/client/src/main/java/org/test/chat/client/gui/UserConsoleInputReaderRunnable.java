@@ -1,28 +1,36 @@
 package org.test.chat.client.gui;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.Console;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class UserConsoleInputReaderRunnable implements Runnable {
 
-    private StringBuffer buffer = new StringBuffer();
-
     @Autowired
-    private UserInputHandlerKeeper userInputHandlerKeeper;
+    protected UserInputHandlerKeeper userInputHandlerKeeper;
+    @Autowired
+    protected ConsoleReaderProvider consoleReaderProvider;
+
+
+    private StringBuffer buffer = new StringBuffer();
+    protected final InputStream systemIn;
+
+
+    public UserConsoleInputReaderRunnable() {
+        systemIn = System.in;
+    }
 
     public void run() {
         try {
-            Console console = System.console();
-            Reader userInputStream =  console != null ? console.reader() : new InputStreamReader(System.in, StandardCharsets.UTF_8);
+            Reader consoleReader = consoleReaderProvider.getConsoleReader();
+            Reader userInputStream =  consoleReader != null ? consoleReader : new InputStreamReader(systemIn, StandardCharsets.UTF_8);
             while (!Thread.interrupted()) {
                 int userInputChar = userInputStream.read();
                 if (userInputChar != '\n') {

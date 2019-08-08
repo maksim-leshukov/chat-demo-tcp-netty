@@ -13,11 +13,7 @@ public class UserInputHandlerKeeper {
     private volatile UserInputHandler userInputHandler;
 
     public void dispatch(String userInput) {
-        if (userInputHandler != null) {
-            userInputHandler.onMessage(userInput);
-        } else {
-            log.warn("Handler is null for input '{}'", userInput);
-        }
+        userInputHandler.onMessage(userInput);
     }
 
 }
