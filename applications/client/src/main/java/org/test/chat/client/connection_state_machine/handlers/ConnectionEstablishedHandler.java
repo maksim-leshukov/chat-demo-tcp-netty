@@ -22,8 +22,6 @@ public class ConnectionEstablishedHandler {
 
     @OnTransition(target = "Connected")
     public void onConnectionEstablished() {
-        log.info("On connected by annotation");
-
         userInputHandlerKeeper.setUserInputHandler(notLoggedUserInputHandler);
 
         userDialogService.print("Please choose username for chat session");

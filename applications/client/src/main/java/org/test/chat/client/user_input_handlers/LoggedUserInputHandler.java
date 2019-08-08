@@ -24,7 +24,7 @@ public class LoggedUserInputHandler implements UserInputHandler {
     protected UserDialogService userDialogService;
 
     public void onMessage(String userInput) {
-        log.info("User input: '{}'", userInput);
+        log.debug("User input: '{}'", userInput);
 
         if (StringUtils.isNotEmpty(userInput)) {
             boolean isCommand = userInput.startsWith("/");
