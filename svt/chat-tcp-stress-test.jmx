@@ -18,8 +18,8 @@
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <stringProp name="LoopController.loops">${__P(loops_count,10)}</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">${__P(threads_count,1000)}</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">120</stringProp>
+        <stringProp name="ThreadGroup.num_threads">${__P(threads_count,1600)}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">60</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
@@ -29,10 +29,8 @@
           <stringProp name="cacheKey">true</stringProp>
           <stringProp name="filename"></stringProp>
           <stringProp name="parameters"></stringProp>
-          <stringProp name="script">setStrictJava(true);
-
-vars.put(&quot;username&quot;, &quot;User &quot; + ctx.getThreadNum());</stringProp>
-          <stringProp name="scriptLanguage">java</stringProp>
+          <stringProp name="script">vars.put(&quot;username&quot;, &quot;User &quot; + ctx.getThreadNum());</stringProp>
+          <stringProp name="scriptLanguage">groovy</stringProp>
         </JSR223PreProcessor>
         <hashTree/>
         <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
@@ -44,12 +42,12 @@ vars.put(&quot;username&quot;, &quot;User &quot; + ctx.getThreadNum());</stringP
             </elementProp>
             <elementProp name="messageDelayBaseMs" elementType="Argument">
               <stringProp name="Argument.name">messageDelayBaseMs</stringProp>
-              <stringProp name="Argument.value">60000.0</stringProp>
+              <stringProp name="Argument.value">45000</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
             <elementProp name="messageDelayDiviationMs" elementType="Argument">
               <stringProp name="Argument.name">messageDelayDiviationMs</stringProp>
-              <stringProp name="Argument.value">15000</stringProp>
+              <stringProp name="Argument.value">15000.0</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
           </collectionProp>
@@ -60,7 +58,7 @@ vars.put(&quot;username&quot;, &quot;User &quot; + ctx.getThreadNum());</stringP
           <boolProp name="TCPSampler.reUseConnection">true</boolProp>
           <stringProp name="TCPSampler.port">8000</stringProp>
           <boolProp name="TCPSampler.nodelay">false</boolProp>
-          <stringProp name="TCPSampler.timeout">10000</stringProp>
+          <stringProp name="TCPSampler.timeout">6000</stringProp>
           <stringProp name="TCPSampler.request"></stringProp>
           <boolProp name="TCPSampler.closeConnection">false</boolProp>
           <stringProp name="TCPSampler.ctimeout">1000</stringProp>
@@ -99,14 +97,15 @@ vars.put(&quot;username&quot;, &quot;User &quot; + ctx.getThreadNum());</stringP
             <stringProp name="BoundaryExtractor.match_number">1</stringProp>
           </BoundaryExtractor>
           <hashTree/>
-          <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="Configure waiting lastMessages" enabled="true">
-            <stringProp name="filename"></stringProp>
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Configure waiting lastMessages" enabled="true">
+            <stringProp name="scriptLanguage">groovy</stringProp>
             <stringProp name="parameters"></stringProp>
-            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
             <stringProp name="script">vars.put(&quot;leftBoundaryExtractor&quot;, &quot;{\&quot;type\&quot;:\&quot;LastMessages\&quot;,\&quot;&quot;);
 vars.put(&quot;rightBoundaryExtractor&quot;, &quot;\&quot;:\&quot;&quot;);
 vars.put(&quot;boundaryWaitForValue&quot;, &quot;payload&quot;);	</stringProp>
-          </BeanShellPostProcessor>
+          </JSR223PostProcessor>
           <hashTree/>
         </hashTree>
         <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="Wait for LastMessages" enabled="true">
@@ -139,10 +138,10 @@ vars.put(&quot;boundaryWaitForValue&quot;, &quot;payload&quot;);	</stringProp>
             <intProp name="Assertion.test_type">16</intProp>
           </ResponseAssertion>
           <hashTree/>
-          <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Message Delay" enabled="true">
+          <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Message Delay" enabled="true">
             <stringProp name="ConstantTimer.delay">${messageDelayBaseMs}</stringProp>
             <stringProp name="RandomTimer.range">${messageDelayDiviationMs}</stringProp>
-          </UniformRandomTimer>
+          </GaussianRandomTimer>
           <hashTree/>
         </hashTree>
         <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="${username} - Send message stop" enabled="true">
@@ -167,10 +166,10 @@ vars.put(&quot;boundaryWaitForValue&quot;, &quot;payload&quot;);	</stringProp>
             <intProp name="Assertion.test_type">16</intProp>
           </ResponseAssertion>
           <hashTree/>
-          <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Message Delay" enabled="true">
+          <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Message Delay" enabled="true">
             <stringProp name="ConstantTimer.delay">${messageDelayBaseMs}</stringProp>
             <stringProp name="RandomTimer.range">${messageDelayDiviationMs}</stringProp>
-          </UniformRandomTimer>
+          </GaussianRandomTimer>
           <hashTree/>
         </hashTree>
         <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="${username} - Logout" enabled="true">
@@ -185,10 +184,10 @@ vars.put(&quot;boundaryWaitForValue&quot;, &quot;payload&quot;);	</stringProp>
           <stringProp name="ConfigTestElement.password"></stringProp>
         </TCPSampler>
         <hashTree>
-          <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Message Delay" enabled="true">
+          <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Message Delay" enabled="true">
             <stringProp name="ConstantTimer.delay">${messageDelayBaseMs}</stringProp>
             <stringProp name="RandomTimer.range">${messageDelayDiviationMs}</stringProp>
-          </UniformRandomTimer>
+          </GaussianRandomTimer>
           <hashTree/>
           <BoundaryExtractor guiclass="BoundaryExtractorGui" testclass="BoundaryExtractor" testname="Extract logout login 1" enabled="true">
             <stringProp name="BoundaryExtractor.useHeaders">false</stringProp>
@@ -200,14 +199,15 @@ vars.put(&quot;boundaryWaitForValue&quot;, &quot;payload&quot;);	</stringProp>
             <stringProp name="BoundaryExtractor.match_number">1</stringProp>
           </BoundaryExtractor>
           <hashTree/>
-          <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="Configure waiting for logout success" enabled="true">
-            <boolProp name="resetInterpreter">false</boolProp>
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Configure waiting for logout success" enabled="true">
+            <stringProp name="scriptLanguage">groovy</stringProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="filename"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
             <stringProp name="script">vars.put(&quot;leftBoundaryExtractor&quot;, &quot;Logout by &apos;&quot;);
 vars.put(&quot;rightBoundaryExtractor&quot;, &quot;&apos; is successful&quot;);
-vars.put(&quot;boundaryWaitForValue&quot;, &quot;${username}&quot;);	</stringProp>
-          </BeanShellPostProcessor>
+vars.put(&quot;boundaryWaitForValue&quot;, vars.get(&quot;username&quot;));	</stringProp>
+          </JSR223PostProcessor>
           <hashTree/>
         </hashTree>
         <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="Wait logout success response" enabled="true">
@@ -223,13 +223,24 @@ vars.put(&quot;boundaryWaitForValue&quot;, &quot;${username}&quot;);	</stringPro
           <boolProp name="TCPSampler.reUseConnection">true</boolProp>
           <stringProp name="TCPSampler.port"></stringProp>
           <boolProp name="TCPSampler.nodelay">false</boolProp>
-          <stringProp name="TCPSampler.timeout"></stringProp>
+          <stringProp name="TCPSampler.timeout">1</stringProp>
           <stringProp name="TCPSampler.request"></stringProp>
           <boolProp name="TCPSampler.closeConnection">true</boolProp>
           <stringProp name="ConfigTestElement.username"></stringProp>
           <stringProp name="ConfigTestElement.password"></stringProp>
         </TCPSampler>
-        <hashTree/>
+        <hashTree>
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Set OK if no read bytes" enabled="true">
+            <stringProp name="scriptLanguage">groovy</stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="script">if (prev.getResponseCode().equals(&quot;500&quot;)) { 
+    prev.setResponseOK();  
+}</stringProp>
+          </JSR223PostProcessor>
+          <hashTree/>
+        </hashTree>
         <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
