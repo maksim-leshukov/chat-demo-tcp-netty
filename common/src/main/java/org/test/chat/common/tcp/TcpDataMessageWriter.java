@@ -1,13 +1,13 @@
 package org.test.chat.common.tcp;
 
-import org.test.chat.common.DataMessageType;
-import org.test.chat.common.data_message.DataMessage;
-import org.test.chat.common.data_message.MessageSerializerDeserializer;
-import org.test.chat.common.message.PayloadMessage;
-import org.test.chat.common.message.PayloadMessageType;
 import io.netty.channel.ChannelHandlerContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.test.chat.common.DataMessageType;
+import org.test.chat.common.data_message.DataMessage;
+import org.test.chat.common.data_message.MessageSerializerDeserializer;
+import org.test.chat.common.data_message.PayloadMessageDataTypeFetcher;
+import org.test.chat.common.message.PayloadMessage;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -18,6 +18,8 @@ public class TcpDataMessageWriter {
 
     @Autowired
     private MessageSerializerDeserializer serializerDeserializer;
+    @Autowired
+    protected PayloadMessageDataTypeFetcher dataTypeFetcher;
 
     private ConcurrentMap<Class, DataMessageType> class2type = new ConcurrentHashMap<>();
 
@@ -34,9 +36,6 @@ public class TcpDataMessageWriter {
     }
 
     private DataMessageType getType(Class payloadMessageClass) {
-        return class2type.computeIfAbsent(payloadMessageClass, payloadClass -> {
-            PayloadMessageType messageTypeAnnotation = (PayloadMessageType) payloadClass.getDeclaredAnnotation(PayloadMessageType.class);
-            return messageTypeAnnotation.value();
-        });
+        return class2type.computeIfAbsent(payloadMessageClass, payloadClass -> dataTypeFetcher.getDataMessageType(payloadClass));
     }
 }

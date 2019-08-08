@@ -1,9 +1,12 @@
 package org.test.chat.common.data_message;
 
+import lombok.*;
 import org.test.chat.common.DataMessageType;
-import lombok.Data;
 
-@Data
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
 public class DataMessage {
 
     private DataMessageType type;

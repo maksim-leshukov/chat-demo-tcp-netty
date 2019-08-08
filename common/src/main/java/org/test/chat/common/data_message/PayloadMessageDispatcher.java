@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
 public class PayloadMessageDispatcher {
 
     @Autowired
-    private MessageSerializerDeserializer messageDeserializer;
+    protected MessageSerializerDeserializer messageDeserializer;
     @Autowired
-    private PayloadMessageHandlersProvider handlersKeeper;
+    protected PayloadMessageHandlersProvider handlersProvider;
 
 
     public void dispatch(DataMessage dataMessage) {
@@ -25,7 +25,7 @@ public class PayloadMessageDispatcher {
         String payloadJson = dataMessage.getPayload();
         PayloadMessage payloadMessage = messageDeserializer.deserialize(type, payloadJson);
 
-        PayloadMessageHandler payloadMessageHandler = handlersKeeper.getHandler(type);
+        PayloadMessageHandler payloadMessageHandler = handlersProvider.getHandler(type);
         payloadMessageHandler.onMessage(payloadMessage);
     }
 

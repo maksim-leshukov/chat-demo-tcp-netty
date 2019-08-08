@@ -18,12 +18,12 @@ import java.nio.charset.Charset;
 public class DataMessageEncoder extends MessageToByteEncoder<DataMessage> {
 
     @Autowired
-    private DataMessageSerializerDeserializer serializerDeserializer;
+    protected DataMessageSerializerDeserializer serializerDeserializer;
 
 
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, DataMessage dataMessage, ByteBuf out) throws Exception {
+    protected void encode(ChannelHandlerContext ctx, DataMessage dataMessage, ByteBuf out) {
         String json = serializerDeserializer.serialize(dataMessage);
         log.trace("Write '{}'", json);
 

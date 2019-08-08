@@ -1,16 +1,16 @@
 package org.test.chat.common.message.to_server;
 
+import lombok.*;
 import org.test.chat.common.DataMessageType;
 import org.test.chat.common.message.PayloadMessage;
 import org.test.chat.common.message.PayloadMessageType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @PayloadMessageType(DataMessageType.ExecuteCommand)

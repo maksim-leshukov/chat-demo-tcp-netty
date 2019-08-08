@@ -1,13 +1,13 @@
 package org.test.chat.common.data_message.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.test.chat.common.DataMessageType;
 import org.test.chat.common.data_message.MessageSerializerDeserializer;
+import org.test.chat.common.data_message.PayloadMessageDataTypeFetcher;
 import org.test.chat.common.data_message.PayloadMessageHandlersProvider;
 import org.test.chat.common.message.PayloadMessage;
 import org.test.chat.common.message.PayloadMessageHandler;
-import org.test.chat.common.message.PayloadMessageType;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.lang.reflect.ParameterizedType;
@@ -20,9 +20,11 @@ import java.util.Map;
 public class ByAnnotationPayloadMessageHandlerProvider implements PayloadMessageHandlersProvider {
 
     @Autowired
-    private MessageSerializerDeserializer messageDeserializer;
+    protected MessageSerializerDeserializer messageDeserializer;
     @Autowired
-    private List<PayloadMessageHandler> handlers;
+    protected List<PayloadMessageHandler> handlers;
+    @Autowired
+    protected PayloadMessageDataTypeFetcher dataTypeFetcher;
 
 
     private final Map<DataMessageType, PayloadMessageHandler> messageType2handler = new HashMap<>();
@@ -33,12 +35,7 @@ public class ByAnnotationPayloadMessageHandlerProvider implements PayloadMessage
             Class<? extends PayloadMessageHandler> handlerClass = handler.getClass();
             Class<? extends PayloadMessage> payloadMessageType = getPayloadMessageClass(handlerClass);
 
-            PayloadMessageType messageTypeAnnotation = payloadMessageType.getDeclaredAnnotation(PayloadMessageType.class);
-            if (messageTypeAnnotation == null) {
-                throw new RuntimeException("Message class " + payloadMessageType + " handled by " + handler + " does not have annotation " + PayloadMessageType.class);
-            }
-
-            DataMessageType messageType = messageTypeAnnotation.value();
+            DataMessageType messageType = dataTypeFetcher.getDataMessageType(payloadMessageType);
 
             messageType2handler.put(messageType, handler);
             messageDeserializer.registerType(messageType, payloadMessageType);
