@@ -14,9 +14,9 @@ import java.util.List;
 public class UsernameCommandExecutor implements CommandExecutor {
 
     @Autowired
-    private ClientWriter clientWriter;
+    protected ClientWriter clientWriter;
     @Autowired
-    private ChatEngine chatEngine;
+    protected ChatEngine chatEngine;
 
     @Override
     public String getCommandName() {

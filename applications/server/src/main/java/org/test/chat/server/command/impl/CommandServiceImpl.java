@@ -17,9 +17,9 @@ import java.util.Map;
 public class CommandServiceImpl implements CommandService {
 
     @Autowired
-    private List<CommandExecutor> commandExecutors;
+    protected List<CommandExecutor> commandExecutors;
     @Autowired
-    private ClientWriter clientWriter;
+    protected ClientWriter clientWriter;
 
     private final Map<String, CommandExecutor> commandName2executor = new HashMap<>();
 

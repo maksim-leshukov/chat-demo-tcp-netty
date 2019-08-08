@@ -1,8 +1,12 @@
 package org.test.chat.server.transport;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class ClientContext {
     private volatile String login;
 }

@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -21,9 +19,6 @@ public class InMemoryMessagesStorage implements MessagesStorage {
     private int messagesStorageLimit;
 
     private CircularFifoQueue<ChatMessage> messages;
-    private ConcurrentLinkedQueue<ChatMessage> msgs;
-
-    private final AtomicLong atomicAddeMessagesCount = new AtomicLong();
 
     @PostConstruct
     public void initMessagesStorage() {
@@ -39,11 +34,6 @@ public class InMemoryMessagesStorage implements MessagesStorage {
         messagePojo.setMessage(message);
 
         messages.add(messagePojo);
-
-        long addedMessagesCount = atomicAddeMessagesCount.incrementAndGet();
-        if (addedMessagesCount % 1000 == 0) {
-            log.info("{} messages added", addedMessagesCount);
-        }
 
         return messagePojo;
     }

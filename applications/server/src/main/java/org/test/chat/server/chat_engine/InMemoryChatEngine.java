@@ -18,11 +18,11 @@ import java.util.List;
 public class InMemoryChatEngine implements ChatEngine {
 
     @Autowired
-    private MessagesStorage messagesStorage;
+    protected MessagesStorage messagesStorage;
     @Autowired
-    private ClientsStorage clientsStorage;
+    protected ClientsStorage clientsStorage;
     @Autowired
-    private ClientWriter messageWriter;
+    protected ClientWriter messageWriter;
 
     @Override
     public void loginAs(String login, ClientContext client) {

@@ -29,10 +29,10 @@ public class TcpChatServerConnectionHandler extends ChannelInboundHandlerAdapter
     @Autowired
     private ClientContextStorage clientContextStorage;
     @Autowired
-    private ChatEngine chatEngine;
+    protected ChatEngine chatEngine;
 
 
-    private final TcpServerClientContext currentConnectionClientContext = new TcpServerClientContext();
+    protected final TcpServerClientContext currentConnectionClientContext = new TcpServerClientContext();
 
 
 
